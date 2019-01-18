@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+    sage-gdb:
+        image: neo4j:latest
+        ports:
+          - "7474:7474"
+    sage:
+        build: ../
+        ports:
+          - "8080:5000"
