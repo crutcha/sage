@@ -1,11 +1,14 @@
 version: "3"
 
 services:
-    sage-gdb:
+    eidetic-gdb:
         image: neo4j:latest
         ports:
           - "7474:7474"
-    sage:
+          - "7687:7687"
+    eidetic:
         build: ../
+        volumes:
+          - ../:/app
         ports:
           - "8080:5000"
