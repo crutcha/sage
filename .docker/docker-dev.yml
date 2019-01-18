@@ -12,3 +12,10 @@ services:
           - ../:/app
         ports:
           - "8080:5000"
+        environment:
+          NEO4J_HOST: bolt://eidetic-gdb:7687
+          NEO4J_USERNAME: ${NEO4J_USERNAME}
+          NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+        depends_on:
+          - eidetic-gdb
+        command: /bin/bash -c "pwd && .docker/wait-for-it.sh -h eidetic-gdb -p 7687 && python app.py"
