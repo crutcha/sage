@@ -1,0 +1,9 @@
+# dont want venv
+/venv
+
+# vscode specific stuff
+/.vscode
+
+# pycache/compiled things
+*.py[cod]
+/__pycache__
