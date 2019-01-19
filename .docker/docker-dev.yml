@@ -6,6 +6,13 @@ services:
         ports:
           - "7474:7474"
           - "7687:7687"
+    eidetic-mq:
+        image: rabbitmq:management
+        ports:
+          - "15672:15672"
+          - "5672:5672"
+    # TODO: environmental variables to handle creds but for dev we'll use defaults until
+    # we get things working.
     eidetic:
         build: ../
         volumes:
