@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Seed Devices</h2>            
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>OS</th>
+          <th>Management IP</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in devices %}
+        <tr>
+          <td>{{d["name"]}}</td>
+          <td>{{d["os"]}}</td>
+          <td>{{d["IP"]}}</td>
+          <td>
+              <!-- TODO: Actually create links here or do it in JS or something-->
+              <i class="glyphicon glyphicon-pencil action-icon"></i>
+              <i class="glyphicon glyphicon-trash action-icon"></i>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>  
+{% endblock %}
