@@ -2,6 +2,7 @@
 
 # Todo
 
+- [ ] Update README with project info
 - [x] Dockerize development setup
 - [ ] Dockerize deployment setup
 - [x] Get basic Celery/Flask integration working 
