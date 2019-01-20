@@ -23,6 +23,26 @@ services:
           NEO4J_HOST: bolt://eidetic-gdb:7687
           NEO4J_USERNAME: ${NEO4J_USERNAME}
           NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+          MQ_HOST: eidetic-mq
+          CELERY_USERNAME: ${CELERY_USERNAME}
+          CELERY_PASSWORD: ${CELERY_PASSWORD}
         depends_on:
           - eidetic-gdb
-        command: /bin/bash -c "pwd && .docker/wait-for-it.sh -h eidetic-gdb -p 7687 && python app.py"
+        command: su -m eidetic -c "pwd && .docker/wait-for-it.sh -h eidetic-gdb -p 7687 && python app.py"
+    # This is super repetitive. Is tehre a better way to handle a specific worker container???
+    eidetic-celery-worker:
+        build: ../
+        volumes:
+          - ../:/app
+        environment:
+          NEO4J_HOST: bolt://eidetic-gdb:7687
+          NEO4J_USERNAME: ${NEO4J_USERNAME}
+          NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+          MQ_HOST: eidetic-mq
+          CELERY_USERNAME: ${CELERY_USERNAME}
+          CELERY_PASSWORD: ${CELERY_PASSWORD}
+        depends_on:
+          - eidetic-gdb
+        # RabbitMQ not being fully started yet wont prevent flask server from running so no need
+        # to wait-for-it on that container
+        command: su -m eidetic -c ".docker/wait-for-it.sh -h eidetic-gdb -p 7687 && celery -A tasks worker --loglevel=info"
