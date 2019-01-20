@@ -1,0 +1,306 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+## Generate a unique ID for this project
+UUID = "FullIPFabric"
+
+## Define port mapping to build the Fabric
+spine_port_map = {  1 => [1,3,5,7],
+                    2 => [2,4,6,8] }
+
+leaf_port_map  = {  1 => [1,2],
+                    2 => [3,4],
+                    3 => [5,6],
+                    4 => [7,8]}
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    config.ssh.insert_key = false
+
+    # Handle each VM seperately so we can call vagrant up using xargs since virtualbox
+    # provider does not support --parallel
+    config.vm.define "spine1-pfe" do |s1pfe|
+        s1pfe.ssh.insert_key = false
+        s1pfe.vm.box = "juniper/vqfx10k-pfe"
+        s1pfe.vm.boot_timeout = 600
+
+        s1pfe.vm.synced_folder ".",
+            "/vagrant", disabled: true
+        
+        s1pfe.vm.network "private_network",
+            auto_config: false,
+            nic_type: "82540EM",
+            virtualbox__intnet: "#{UUID}_spine1_internal"
+        
+        s1pfe.vm.provider "virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        end
+    end
+
+    config.vm.define "spine2-pfe" do |s2pfe|
+        s2pfe.ssh.insert_key = false
+        s2pfe.vm.box = "juniper/vqfx10k-pfe"
+        s2pfe.vm.boot_timeout = 600
+
+        s2pfe.vm.synced_folder ".",
+            "/vagrant", disabled: true
+        
+        s2pfe.vm.network "private_network",
+            auto_config: false,
+            nic_type: "82540EM",
+            virtualbox__intnet: "#{UUID}_spine1_internal"
+        
+        s2pfe.vm.provider "virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        end
+    end
+
+    config.vm.define "spine1" do |s1|
+        s1.vm.hostname = "spine1"
+        s1.vm.box = "juniper/vqfx10k-re"
+        s1.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed
+        s1.vm.synced_folder ".", "/vagrant", disabled: true
+
+        # Internal em1 port to PFE
+        s1.vm.network "private_network",
+            auto_config: false,
+            nic_type: "82540EM",
+            virtualbox__intnet: "#{UUID}_spine1_internal"
+        
+        # Unused em2 port
+        s1.vm.network "private_network",
+            auto_config: false,
+            nic_type: "82540EM",
+            virtualbox__intnet: "#{UUID}_reserved-bridge"
+
+        # em3 - em6 (xe-0/0/0 - xe-0/0/3)
+        (0..3).each do |seg_id|
+            s1.vm.network "private_network",
+                auto_config: false,
+                nic_type: "82540EM",
+                virtualbox__intnet: "#{UUID}_seg#{spine_port_map[1][seg_id]}"
+        end
+    end
+
+    config.vm.define "spine2" do |s2|
+        s2.vm.hostname = "spine2"
+        s2.vm.box = "juniper/vqfx10k-re"
+        s2.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed
+        s2.vm.synced_folder ".", "/vagrant", disabled: true
+
+        # Internal em1 port to PFE
+        s2.vm.network "private_network",
+            auto_config: false,
+            nic_type: "82540EM",
+            virtualbox__intnet: "#{UUID}_spine2_internal"
+        
+        # Unused em2 port
+        s2.vm.network "private_network",
+            auto_config: false,
+            nic_type: "82540EM",
+            virtualbox__intnet: "#{UUID}_reserved-bridge"
+
+        # em3 - em6 (xe-0/0/0 - xe-0/0/3)
+        (0..3).each do |seg_id|
+            s2.vm.network "private_network",
+                auto_config: false,
+                nic_type: "82540EM",
+                virtualbox__intnet: "#{UUID}_seg#{spine_port_map[1][seg_id]}"
+        end
+    end
+
+    config.vm.define "leaf1-pfe" do |l1pfe|
+        l1pfe.ssh.insert_key = false
+        l1pfe.vm.box = 'juniper/vqfx10k-pfe'
+        l1pfe.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed ttt
+        l1pfe.vm.synced_folder '.', 
+            '/vagrant', disabled: true
+
+        # Internal em1 port to RE
+        l1pfe.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_leaf1_internal"
+
+        # In case you have limited resources, you can limit the CPU used per vqfx-pfe VM, usually 50% is good
+        l1pfe.vm.provider "virtualbox" do |v|
+           v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        end
+    end
+
+    config.vm.define "leaf1" do |l1|
+        l1.vm.hostname = "leaf1"
+        l1.vm.box = 'juniper/vqfx10k-re'
+        l1.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed
+        l1.vm.synced_folder '.', '/vagrant', disabled: true
+
+        # Internal em1 port to PFE
+        l1.vm.network 'private_network',
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_leaf1_internal"
+        
+        # Unused em2 port
+        l1.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_reserved-bridge"
+        
+        # em3 - em4 (xe-0/0/0 - xe-0/0/1)
+        (0..1).each do |seg_id|
+            l1.vm.network 'private_network', 
+                auto_config: false, 
+                nic_type: '82540EM', 
+                virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[1][seg_id]}"
+        end
+
+        # em5 (xe-0/0/2) facing server
+        l1.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_server_1"
+    end
+
+    config.vm.define "leaf1-pfe" do |l1pfe|
+        l1pfe.ssh.insert_key = false
+        l1pfe.vm.box = 'juniper/vqfx10k-pfe'
+        l1pfe.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed ttt
+        l1pfe.vm.synced_folder '.', 
+            '/vagrant', disabled: true
+
+        # Internal em1 port to RE
+        l1pfe.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_leaf1_internal"
+
+        # In case you have limited resources, you can limit the CPU used per vqfx-pfe VM, usually 50% is good
+        l1pfe.vm.provider "virtualbox" do |v|
+           v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        end
+    end
+
+    config.vm.define "leaf2" do |l2|
+        l2.vm.hostname = "leaf2"
+        l2.vm.box = 'juniper/vqfx10k-re'
+        l2.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed
+        l2.vm.synced_folder '.', '/vagrant', disabled: true
+
+        # Internal em1 port to PFE
+        l2.vm.network 'private_network',
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_leaf2_internal"
+        
+        # Unused em2 port
+        l2.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_reserved-bridge"
+        
+        # em3 - em4 (xe-0/0/0 - xe-0/0/1)
+        (0..1).each do |seg_id|
+            l2.vm.network 'private_network', 
+                auto_config: false, 
+                nic_type: '82540EM', 
+                virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[2][seg_id]}"
+        end
+
+        # em5 (xe-0/0/2) facing server
+        l2.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_server_2"
+    end
+
+    config.vm.define "leaf2-pfe" do |l2pfe|
+        l2pfe.ssh.insert_key = false
+        l2pfe.vm.box = 'juniper/vqfx10k-pfe'
+        l2pfe.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed ttt
+        l2pfe.vm.synced_folder '.', 
+            '/vagrant', disabled: true
+
+        # Internal em1 port to RE
+        l2pfe.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_leaf2_internal"
+
+        # In case you have limited resources, you can limit the CPU used per vqfx-pfe VM, usually 50% is good
+        l2pfe.vm.provider "virtualbox" do |v|
+           v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        end
+    end
+
+    config.vm.define "leaf3" do |l3|
+        l3.vm.hostname = "leaf3"
+        l3.vm.box = 'juniper/vqfx10k-re'
+        l3.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed
+        l3.vm.synced_folder '.', '/vagrant', disabled: true
+
+        # Internal em1 port to PFE
+        l3.vm.network 'private_network',
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_leaf3_internal"
+        
+        # Unused em2 port
+        l3.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_reserved-bridge"
+        
+        # em3 - em4 (xe-0/0/0 - xe-0/0/1)
+        (0..1).each do |seg_id|
+            l3.vm.network 'private_network', 
+                auto_config: false, 
+                nic_type: '82540EM', 
+                virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[3][seg_id]}"
+        end
+
+        # em5 (xe-0/0/2) facing server
+        l3.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_server_3"
+    end
+
+    config.vm.define "leaf3-pfe" do |l3pfe|
+        l3pfe.ssh.insert_key = false
+        l3pfe.vm.box = 'juniper/vqfx10k-pfe'
+        l3pfe.vm.boot_timeout = 600
+
+        # DO NOT REMOVE / NO VMtools installed ttt
+        l3pfe.vm.synced_folder '.', 
+            '/vagrant', disabled: true
+
+        # Internal em1 port to RE
+        l3pfe.vm.network 'private_network', 
+            auto_config: false, 
+            nic_type: '82540EM', 
+            virtualbox__intnet: "#{UUID}_leaf3_internal"
+
+        # In case you have limited resources, you can limit the CPU used per vqfx-pfe VM, usually 50% is good
+        l3pfe.vm.provider "virtualbox" do |v|
+           v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        end
+    end
+end
