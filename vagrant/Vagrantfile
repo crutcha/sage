@@ -293,7 +293,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 "server"       => ["srv1", "srv2", "srv3" ],
                 "all:children" => ["vqfx10k", "server" ]
             }
-            ansible.playbook = "pb.conf.all.commit.yaml"
+            ansible.playbook = "baseconfig.yml"
+            #ansible.verbose = "vvv"
     end
 end
 end

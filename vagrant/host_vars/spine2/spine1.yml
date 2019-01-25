@@ -1,0 +1,49 @@
+host_name: spine2
+host:
+  local_as: 65002
+  loopback:
+    ip_address: 2.2.2.2/32
+  interfaces:
+    - interface: xe-0/0/0
+      description: leaf1
+      mtu: 9216
+      units:
+        - number: 0
+          mtu: 9100
+          ip_address: 10.10.2.0/31
+    - interface: xe-0/0/1
+      description: leaf2
+      mtu: 9216
+      units:
+        - number: 0
+          mtu: 9100
+          ip_address: 10.10.2.2/31
+    - interface: xe-0/0/2
+      description: leaf3
+      mtu: 9216
+      units:
+        - number: 0
+          mtu: 9100
+          ip_address: 10.10.2.4/31
+  protocols:
+    bgp:
+      groups:
+        - name: fabric
+          type: external
+          neighbors:
+            - name: 10.10.2.1
+              peer_as: 65003
+            - name: 10.10.2.3
+              peer_as: 65004
+            - name: 10.10.2.5
+              peer_as: 65005
+    pim:
+      rp: 10.10.10.10
+      anycastrp: 2.2.2.2
+      interfaces:
+        - name: xe-0/0/0.0
+          mode: sparse
+        - name: xe-0/0/1.0
+          mode: sparse
+          name: xe-0/0/2.0
+          mode: sparse
