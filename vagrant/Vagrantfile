@@ -287,11 +287,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     if !Vagrant::Util::Platform.windows?
         config.vm.provision "ansible" do |ansible|
             ansible.groups = {
-                "vqfx10k"      => ["spine1", "spine2", "leaf1", "leaf2", "leaf3" ],
                 "spine"        => ["spine1", "spine2"],
                 "leaf"         => ["leaf1", "leaf2", "leaf3" ],
-                "server"       => ["srv1", "srv2", "srv3" ],
-                "all:children" => ["vqfx10k", "server" ]
+                "all:children" => ["spine", "leaf" ]
             }
             ansible.playbook = "baseconfig.yml"
             #ansible.verbose = "vvv"

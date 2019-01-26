@@ -1,5 +1,5 @@
 - name: Build base configuration
-  hosts: spine
+  hosts: spine, leaf
   connection: local
   gather_facts: no
   roles:

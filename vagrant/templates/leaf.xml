@@ -1,0 +1,94 @@
+<configuration>
+    <interfaces>
+        {% for i in host.interfaces %}
+        <interface>
+            <name>{{ i.interface }}</name>
+            <description>{{ i.description }}</description>
+            <mtu>{{ i.mtu }}</mtu>
+            {% for u in i.units %}
+            <unit>
+                <name>{{ u.number }}</name>
+                <family>
+                    <inet>
+                        <mtu>{{ u.mtu }}</mtu>
+                        <address>
+                            <name>{{ u.ip_address }}</name>
+                        </address>
+                    </inet>
+                </family>
+            </unit>
+            {% endfor %}
+        </interface>
+        {% endfor %}
+        <interface>
+            <name>lo0</name>
+            <unit>
+                <name>0</name>
+                <family>
+                    <inet>
+                        <address>
+                            <name>{{ host.loopback.ip_address }}</name>
+                        </address>
+                    </inet>
+                </family>
+            </unit>
+        </interface>
+    </interfaces>
+    <routing-options>
+        <router-id>{{ host.loopback.ip_address.split('/')[0] }}</router-id>
+        <autonomous-system>
+            <as-number>{{ host.local_as }}</as-number>
+        </autonomous-system>
+        <forwarding-table>
+            <export>PFE-LB</export>
+        </forwarding-table>
+    </routing-options>
+    <policy-options>
+        <policy-statement>
+            <name>PFE-LB</name>
+            <then>
+                <load-balance>
+                    <per-packet />
+                </load-balance>
+            </then>
+        </policy-statement>
+    </policy-options>
+    <protocols>
+        <bgp>
+            <log-updown />
+            <graceful-restart></graceful-restart>
+            {% for g in host.protocols.bgp.groups %}
+            <group>
+                <name>{{ g.name }}</name>
+                <type>{{ g.type }}</type>
+                <mtu-discovery />
+                <multipath>
+                    <multiple-as />
+                </multipath>
+                {% for n in g.neighbors %}
+                <neighbor>
+                    <name>{{ n.name }}</name>
+                    <peer-as>{{ n.peer_as }}</peer-as>
+                </neighbor>
+                {% endfor %}
+            </group>
+            {% endfor %}
+        </bgp>
+        <pim>
+            <rp>
+                <static>
+                    <address>
+                        <name>{{ host.protocols.pim.rp_address }}</name>
+                    </address>
+                </static>
+            </rp>>
+            <interface>
+                <name>all</name>
+            </interface>
+            <interface>
+                <name>em0.0</name>
+                <disable/>
+            </interface>
+        </pim>
+    </protocols>
+</configuration>
