@@ -1,7 +1,7 @@
 <configuration>
     <interfaces>
         {% for i in host.interfaces %}
-        <interface>
+        <interface replace="replace">
             <name>{{ i.interface }}</name>
             <description>{{ i.description }}</description>
             <mtu>{{ i.mtu }}</mtu>
@@ -87,6 +87,7 @@
                                 </address>
                               </rp-set>
                               <local-address>{{ host.loopback.ip_address.split('/')[0] }}</local-address>
+                            </anycast-pim>
                         </inet>
                     </family>
                 </local>

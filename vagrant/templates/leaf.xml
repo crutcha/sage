@@ -1,7 +1,7 @@
 <configuration>
     <interfaces>
         {% for i in host.interfaces %}
-        <interface>
+        <interface replace="replace">
             <name>{{ i.interface }}</name>
             <description>{{ i.description }}</description>
             <mtu>{{ i.mtu }}</mtu>
