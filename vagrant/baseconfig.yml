@@ -1,5 +1,5 @@
-- name: Build base configuration
-  hosts: spine, leaf
+- name: Build Spine configuration
+  hosts: spine
   connection: local
   gather_facts: no
   roles:
@@ -7,8 +7,31 @@
   tasks:
     - debug:
         var: hostvars[inventory_hostname]
-    - name: Build Base Configuration
+    - name: Build Spine Configuration
       template: src=templates/spine.xml dest=/tmp/{{ inventory_hostname  }}.xml
+
+    - name: Install template
+      junos_install_config:
+        host: "{{ ansible_ssh_host  }}"
+        port: "{{ ansible_ssh_port  }}"
+        user: "root"
+        passwd: "Juniper"
+        comment: "configured by ansible"
+        file: "/tmp/{{ inventory_hostname  }}.xml"
+        logfile: "changes.log"
+        replace: true
+
+- name: Build Leaf configuration
+  hosts: leaf
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  tasks:
+    - debug:
+        var: hostvars[inventory_hostname]
+    - name: Build Leaf Configuration
+      template: src=templates/leaf.xml dest=/tmp/{{ inventory_hostname  }}.xml
 
     - name: Install template
       junos_install_config:

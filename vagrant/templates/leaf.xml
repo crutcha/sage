@@ -81,7 +81,7 @@
                         <name>{{ host.protocols.pim.rp_address }}</name>
                     </address>
                 </static>
-            </rp>>
+            </rp>
             <interface>
                 <name>all</name>
             </interface>
