@@ -69,6 +69,18 @@
                     <accept/>
                 </then>
             </term>
+            <term>
+                <name>pim</name>
+                <from>
+                    <route-filter>
+                        <address>{{ host.protocols.pim.rp }}/32</address>
+                        <exact/>
+                    </route-filter>
+                </from>
+                <then>
+                    <accept/>
+                </then>
+            </term>
         </policy-statement>
     </policy-options>
     <protocols>

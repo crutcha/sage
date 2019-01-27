@@ -8,6 +8,7 @@
             <name>{{ i.interface }}</name>
             <description>{{ i.description }}</description>
             <mtu>{{ i.mtu }}</mtu>
+            {% if i.family == 'inet' %}
             {% for u in i.units %}
             <unit>
                 <name>{{ u.number }}</name>
@@ -21,6 +22,21 @@
                 </family>
             </unit>
             {% endfor %}
+            {% elif i.family == 'ethernet-switching' %}
+            {% for u in i.units %}
+            <unit>
+                <name>{{ u.number }}</name>
+                <family>
+                    <ethernet-switching>
+                        <interface-mode>{{ u.mode }}</interface-mode>
+                        <vlan>
+                            <members>{{ u.vlans }}</members>
+                        </vlan>
+                    </ethernet-switching>
+                </family>
+            </unit>
+            {% endfor %}
+            {% endif %}
         </interface>
         {% endfor %}
         <interface>
@@ -110,4 +126,21 @@
             </interface>
         </pim>
     </protocols>
+    <switch-options>
+        <vtep-source-interface>
+            <interface-name>lo0.0</interface-name>
+        </vtep-source-interface>
+    </switch-options>
+    <vlans>
+        {% for v in host.vlans %}
+        <vlan>
+            <name>{{ v.name }}</name>
+            <vlan-id>{{ v.vlan_id }}</vlan-id>
+            <vxlan>
+                <vni>{{ v.vni }}</vni>
+                <multicast-group>{{ v.multicast_group }}</multicast-group>
+            </vxlan>
+        </vlan>
+        {% endfor %}
+    </vlans>    
 </configuration>

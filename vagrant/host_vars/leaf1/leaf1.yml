@@ -6,6 +6,7 @@ host:
   interfaces:
     - interface: xe-0/0/0
       description: spine1
+      family: inet
       mtu: 9216
       units:
         - number: 0
@@ -13,11 +14,22 @@ host:
           ip_address: 10.10.1.1/31
     - interface: xe-0/0/1
       description: spine2
+      family: inet
       mtu: 9216
       units:
         - number: 0
           mtu: 9100
           ip_address: 10.10.2.1/31
+    - interface: xe-0/0/2
+      description: HOST1
+      family: ethernet-switching
+      mtu: 9216
+      units:
+        - number: 0
+          mode: trunk
+          # this is fine for now, but make it an array
+          # later on
+          vlans: HOST1TEST
   protocols:
     bgp:
       groups:
@@ -30,3 +42,8 @@ host:
               peer_as: 65002
     pim:
       rp_address: 10.10.10.10
+  vlans:
+    - name: HOST1TEST
+      vlan_id: 100
+      vni: 1000
+      multicast_group: 225.10.10.10
