@@ -39,7 +39,7 @@ host:
               peer_as: 65005
     pim:
       rp: 10.10.10.10
-      anycast_rp: 2.2.2.2
+      anycast_rp: 1.1.1.1
       interfaces:
         - name: xe-0/0/0.0
           mode: sparse

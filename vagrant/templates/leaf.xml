@@ -7,14 +7,12 @@
         <interface replace="replace">
             <name>{{ i.interface }}</name>
             <description>{{ i.description }}</description>
-            <mtu>{{ i.mtu }}</mtu>
             {% if i.family == 'inet' %}
             {% for u in i.units %}
             <unit>
                 <name>{{ u.number }}</name>
                 <family>
                     <inet>
-                        <mtu>{{ u.mtu }}</mtu>
                         <address>
                             <name>{{ u.ip_address }}</name>
                         </address>
@@ -28,7 +26,6 @@
                 <name>{{ u.number }}</name>
                 <family>
                     <ethernet-switching>
-                        <interface-mode>{{ u.mode }}</interface-mode>
                         <vlan>
                             <members>{{ u.vlans }}</members>
                         </vlan>

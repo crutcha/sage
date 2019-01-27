@@ -7,13 +7,11 @@
         <interface replace="replace">
             <name>{{ i.interface }}</name>
             <description>{{ i.description }}</description>
-            <mtu>{{ i.mtu }}</mtu>
             {% for u in i.units %}
             <unit>
                 <name>{{ u.number }}</name>
                 <family>
                     <inet>
-                        <mtu>{{ u.mtu }}</mtu>
                         <address>
                             <name>{{ u.ip_address }}</name>
                         </address>
@@ -133,6 +131,10 @@
                 <mode>{{ i.mode }}</mode>
             </interface>
             {% endfor %}
+	    <interface>
+		<name>lo0.0</name>
+		<mode>sparse</name>
+            </interface>
         </pim>
     </protocols>
 </configuration>
