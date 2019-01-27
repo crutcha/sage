@@ -47,3 +47,7 @@ host:
       vlan_id: 100
       vni: 1000
       multicast_group: 225.10.10.10
+    - name: HOST2TEST
+      vlan_id: 200
+      vni: 2000
+      multicast_group: 225.10.10.10

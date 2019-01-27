@@ -284,14 +284,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             virtualbox__intnet: "#{UUID}_server_3"
     end
 
+    config.vm.define "srv1" do |srv1|
+        srv1.vm.box = "ubuntu/xenial64"
+        srv1.vm.hostname = "srv1"
+        srv1.vm.network "private_network",
+            ip: "192.168.1.5",
+            nic_type: '82540EM',
+            virtualbox__intnet: "{#UUID}_server_1"
+        srv1.ssh.insert_key = true
+    end
+
+    config.vm.define "srv2" do |srv2|
+        srv2.vm.box = "ubuntu/xenial64"
+        srv2.vm.hostname = "srv2"
+        srv2.vm.network "private_network",
+            ip: "192.168.1.6",
+            nic_type: "82540EM",
+            virtualbox__intnet: "{#UUID}_server_2"
+        srv2.ssh.insert_key = true
+    end
+
     if !Vagrant::Util::Platform.windows?
         config.vm.provision "ansible" do |ansible|
             ansible.groups = {
                 "spine"        => ["spine1", "spine2"],
                 "leaf"         => ["leaf1", "leaf2", "leaf3" ],
+                "server"       => ["srv1", "srv2"],
                 "all:children" => ["spine", "leaf" ]
             }
             ansible.playbook = "baseconfig.yml"
+        end
     end
-end
 end

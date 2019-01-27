@@ -29,7 +29,7 @@ host:
           mode: trunk
           # this is fine for now, but make it an array
           # later on
-          vlans: HOST2TEST
+          vlans: HOST1TEST
   protocols:
     bgp:
       groups:
@@ -43,6 +43,10 @@ host:
     pim:
       rp_address: 10.10.10.10
   vlans:
+    - name: HOST1TEST
+      vlan_id: 100
+      vni: 1000
+      multicast_group: 225.10.10.10
     - name: HOST2TEST
       vlan_id: 200
       vni: 2000
