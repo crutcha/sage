@@ -1,4 +1,7 @@
 <configuration>
+    <system>
+        <host-name>{{ host_name  }}</host-name>
+    </system>
     <interfaces>
         {% for i in host.interfaces %}
         <interface replace="replace">
@@ -52,11 +55,27 @@
                 </load-balance>
             </then>
         </policy-statement>
+        <policy-statement>
+            <name>fabric-out</name>
+            <term>
+                <name>direct</name>
+                <from>
+                    <protocol>direct</protocol>
+                </from>
+                <then>
+                    <next-hop>
+                        <self/>
+                    </next-hop>
+                    <accept/>
+                </then>
+            </term>
+        </policy-statement>
     </policy-options>
     <protocols>
         <bgp>
             <log-updown />
             <graceful-restart></graceful-restart>
+            <export>fabric-out</export>
             {% for g in host.protocols.bgp.groups %}
             <group>
                 <name>{{ g.name }}</name>
