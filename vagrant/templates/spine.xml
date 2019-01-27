@@ -31,6 +31,10 @@
                     <inet>
                         <address>
                             <name>{{ host.loopback.ip_address }}</name>
+                            <primary/>
+                        </address>
+                        <address>
+                            <name>{{ host.protocols.pim.rp }}</name>
                         </address>
                     </inet>
                 </family>
