@@ -41,7 +41,7 @@ host:
             - name: 10.10.2.4
               peer_as: 65002
     pim:
-      rp_address: 10.10.10.10
+      rp_address: 1.1.1.1
   vlans:
     - name: HOST3TEST
       vlan_id: 300

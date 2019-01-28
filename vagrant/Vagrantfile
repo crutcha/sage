@@ -213,18 +213,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             nic_type: '82540EM',
             virtualbox__intnet: "#{UUID}_server_1"
 
-	# DEBUG PORT
-        l1.vm.network 'private_network',
-            auto_config: false,
-            nic_type: '82540EM',
-            virtualbox__intnet: "#{UUID}_server_2"
-
-	# Switched ports need to be promiscuous
         l1.vm.provider "virtualbox" do |v|
-	    v.customize ["modifyvm", :id, "--nicpromisc5", "allow-all"]
-        end
-        l1.vm.provider "virtualbox" do |v|
-	    v.customize ["modifyvm", :id, "--nicpromisc6", "allow-all"]
+	   (3..7).each do |nic_num|
+	        v.customize ["modifyvm", :id, "--nicpromisc#{nic_num}", "allow-all"]
+	   end
         end
     end
 

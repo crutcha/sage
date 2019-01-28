@@ -109,21 +109,21 @@
         </bgp>
         <pim>
             <rp>
+                {% if host.protocols.pim.type == 'local' %}
                 <local>
                     <family>
                         <inet>
                             <address>{{ host.protocols.pim.rp }}</address>
-                            <anycast-pim>
-                              <rp-set>
-                                <address>
-                                  <name>{{ host.protocols.pim.anycast_rp }}</name>
-                                </address>
-                              </rp-set>
-                              <local-address>{{ host.loopback.ip_address.split('/')[0] }}</local-address>
-                            </anycast-pim>
                         </inet>
                     </family>
                 </local>
+                {% elif host.protocols.pim.type == 'static' %}
+		<static>
+		    <address>
+			<name>{{ host.protocols.pim.rp }}</name>
+		    </address>
+		</static>
+		{% endif %}
             </rp>
             {% for i in host.protocols.pim.interfaces %}
             <interface>
@@ -133,7 +133,7 @@
             {% endfor %}
 	    <interface>
 		<name>lo0.0</name>
-		<mode>sparse</name>
+		<mode>sparse</mode>
             </interface>
         </pim>
     </protocols>
