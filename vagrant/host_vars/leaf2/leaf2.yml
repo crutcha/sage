@@ -24,9 +24,8 @@ host:
       units:
         - number: 0
           mode: trunk
-          # this is fine for now, but make it an array
-          # later on
-          vlans: HOST1TEST
+          vlans: 
+            - HOST1TEST
   protocols:
     bgp:
       groups:
@@ -44,8 +43,6 @@ host:
     - name: HOST1TEST
       vlan_id: 100
       vni: 1000
-      multicast_group: 225.10.10.10
     - name: HOST2TEST
       vlan_id: 200
       vni: 2000
-      multicast_group: 225.10.10.10
