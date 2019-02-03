@@ -26,14 +26,14 @@
                 <name>{{ u.number }}</name>
                 <family>
                     <ethernet-switching>
-			{% if u.mode == 'trunk' %}
-			<interface-mode>trunk</interface-mode>
-			{% endif %}
-                        <vlan>
-			    {% for vlan in u.vlans %}
-                            <members>{{ u.vlans }}</members>
-			    {% endfor %}
-                        </vlan>
+                    {% if u.mode == 'trunk' %}
+                    <interface-mode>trunk</interface-mode>
+                    {% endif %}
+                    <vlan>
+                        {% for vlan in u.vlans %}
+                        <members>{{ vlan }}</members>
+                        {% endfor %}
+                    </vlan>
                     </ethernet-switching>
                 </family>
             </unit>

@@ -26,7 +26,7 @@ host:
           mode: trunk
           vlans: 
             - HOST1TEST
-	    - HOST2TEST
+            - HOST2TEST
   protocols:
     bgp:
       groups:

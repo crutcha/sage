@@ -294,9 +294,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vsrx1.vm.box = "juniper/ffp-12.1X47-D15.4"
         vsrx1.vm.hostname = "vsrx1"
         vsrx1.vm.network "private_network",
+            # Apparently IP is required, even though we are going to nuke
+            # this with ansible...
+            ip: "1.1.1.1",
             nic_type: "82545EM",
             virtualbox_intnet: "#{UUID}_fw_trunk"
-        vsrx1.insert_key = true
+        vsrx1.ssh.insert_key = true
     end
 
     config.vm.define "srv1" do |srv1|
