@@ -42,6 +42,8 @@ ansible-galaxy install Juniper.junos
 
 # Add boxes ahead of time
 echo "INSTALLING VAGRANT BOXES..."
+vagrant plugin install vagrant-host-shell
+vagrant plugin install vagrant-junos
 vagrant box add "juniper/vqfx10k-re"
 vagrant box add "juniper/vqfx10k-pfe"
 vagrant box add "ubuntu/xenial64"

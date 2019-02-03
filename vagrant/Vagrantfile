@@ -293,7 +293,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "vsrx1" do |vsrx1|
         vsrx1.vm.box = "juniper/ffp-12.1X47-D15.4"
         vsrx1.vm.hostname = "vsrx1"
-        vsrx.vm.network = "private_network",
+        vsrx1.vm.network "private_network",
             nic_type: "82545EM",
             virtualbox_intnet: "#{UUID}_fw_trunk"
         vsrx1.insert_key = true
