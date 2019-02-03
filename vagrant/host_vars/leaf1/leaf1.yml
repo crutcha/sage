@@ -1,8 +1,10 @@
 host_name: leaf1
 host:
-  local_as: 65003
+  local_as: 65000
   loopback:
     ip_address: 3.3.3.3/32
+  route_distinguisher: "3333:1"
+  vrf_target: "target:65000:3333"
   interfaces:
     - interface: xe-0/0/0
       description: spine1
@@ -34,7 +36,7 @@ host:
     bgp:
       groups:
         - name: overlay
-          type: external
+          type: internal
           neighbors:
             - name: 4.4.4.4
               peer_as: 65004

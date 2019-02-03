@@ -99,13 +99,7 @@
             <group>
                 <name>{{ g.name }}</name>
                 <type>{{ g.type }}</type>
-                <mtu-discovery />
-                <multipath>
-                    <multiple-as />
-                </multipath>
-                <multihop>
-                    <ttl>3</ttl>
-                </multihop>
+		<local-address>{{ host.loopback.ip_address.split('/')[0] }}</local-address>
                 <family>
                     <evpn>
                         <signaling></signaling>
@@ -114,7 +108,6 @@
                 {% for n in g.neighbors %}
                 <neighbor>
                     <name>{{ n.name }}</name>
-                    <peer-as>{{ n.peer_as }}</peer-as>
                 </neighbor>
                 {% endfor %}
             </group>
@@ -142,11 +135,11 @@
             <interface-name>lo0.0</interface-name>
         </vtep-source-interface>
         <route-distinguisher>
-            <rd-type>{{ host.loopback.ip_address.split('/')[0] }}:{{ host.local_as }}</rd-type>
+            <rd-type>{{ host.route_distinguisher }}</rd-type>
         </route-distinguisher>
         <vrf-import>VRF-IMPORT</vrf-import>
         <vrf-target>
-            <community>target:9999:9999</community>
+            <community>{{ host.vrf_target }}</community>
             <auto></auto>
         </vrf-target>
     </switch-options>
