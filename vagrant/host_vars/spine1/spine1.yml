@@ -47,3 +47,9 @@ host:
           mode: sparse
         - name: xe-0/0/2.0
           mode: sparse
+    ospf:
+      interfaces:
+        - xe-0/0/0
+        - xe-0/0/1
+        - xe-0/0/2
+        - lo0.0

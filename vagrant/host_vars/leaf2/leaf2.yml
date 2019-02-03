@@ -33,15 +33,20 @@ host:
   protocols:
     bgp:
       groups:
-        - name: fabric
+        - name: overlay
           type: external
           neighbors:
-            - name: 10.10.1.2
-              peer_as: 65001
-            - name: 10.10.2.2
-              peer_as: 65002
+            - name: 3.3.3.3
+              peer_as: 65003
+            - name: 5.5.5.5
+              peer_as: 65005
     pim:
       rp_address: 1.1.1.1
+    ospf:
+      interfaces:
+        - xe-0/0/0
+        - xe-0/0/1
+        - lo0.0
   vlans:
     - name: HOST1TEST
       vlan_id: 100
