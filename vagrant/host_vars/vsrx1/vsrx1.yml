@@ -1,0 +1,37 @@
+host_name: vsrx1
+interfaces:
+  - interface: ge-0/0/1
+    units:
+      - number: 100
+        vlan_id: 100
+        ip_address: 192.168.1.1/24
+      - number: 200
+        vlan_id: 200
+        ip_address: 192.168.2.1/24
+zones:
+  - name: HOST1
+    interface: ge-0/0/1.100
+  - name: HOST2
+    interface: ge-0/0/1.200
+address_book:
+  addresses:
+    - name: SRV1
+      cidr: 192.168.1.5/32
+    - name: SRV2
+      cidr: 192.168.1.6/32
+    - name: SRV3
+      cidr: 192.168.2.5/32
+security_policy:
+  - from_zone: HOST1
+    to_zone: HOST2
+    policies:
+      - name: HOST1_TO_HOST2
+        match:
+          source_address:
+            - SRV1
+          destination_address:
+            - SRV3
+          application:
+            - junos-icmp-all
+        action: permit
+

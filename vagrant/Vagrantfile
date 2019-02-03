@@ -328,6 +328,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 "spine"        => ["spine1", "spine2"],
                 "leaf"         => ["leaf1", "leaf2", "leaf3" ],
                 "server"       => ["srv1", "srv2"],
+                "firewall"     => ["vsrx1"],
                 "all:children" => ["spine", "leaf" ]
             }
             ansible.playbook = "baseconfig.yml"

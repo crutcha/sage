@@ -1,0 +1,91 @@
+    <configuration>
+            <system>
+                <host-name>{{ host_name }}</host-name>
+            </system>    
+        <interfaces>
+                {% for intf in interfaces %}
+                <interface replace="replace">
+                    <name>{{ intf.interface }}</name>
+                    <vlan-tagging/>
+                    {% for u in intf.units %}
+                    <unit>
+                        <name>{{ u.number }}</name>
+                        <vlan-id>{{ u.vlan_id }}</vlan-id>
+                        <family>
+                            <inet>
+                                <address>
+                                    <name>{{ u.ip_address }}</name>
+                                </address>
+                            </inet>
+                        </family>
+                    </unit>
+                    {% endfor %}
+                </interface>
+                {% endfor %}
+            </interfaces>
+            <security>
+                <address-book>
+                    <name>global</name>
+                    {% for entry in address_book.addresses %}
+                    <address>
+                        <name>{{ entry.name }}</name>
+                        <ip-prefix>{{ entry.cidr }}</ip-prefix>
+                    </address>
+                    {% endfor %}
+                </address-book>
+                <policies>
+                    {% for policy in security_policy %}
+                    <policy>
+                        <from-zone-name>{{ policy.from_zone }}</from-zone-name>
+                        <to-zone-name>{{ policy.to_zone }}</to-zone-name>
+                        {% for zonepolicy in policy.policies %}
+                        <policy>
+                            <name>{{ zonepolicy.name }}</name>
+                            <match>
+                                {% for src in zonepolicy.match.source_address %}
+                                <source-address>{{ src }}</source-address>
+                                {% endfor %}
+                                {% for dst in zonepolicy.match.destination_address %}
+                                <destination-address>{{ dst }}</destination-address>
+                                {% endfor %}
+                                {% for app in zonepolicy.match.application %}
+                                <application>{{ app }}</application>
+                                {% endfor %}
+                            </match>
+                            <then>
+                                {% if zonepolicy.action == 'permit' %}
+                                <permit>
+                                </permit>
+                                {% elif zonepolicy.action == 'deny' %}
+                                <deny/>
+                                {% endif %}
+                                <log>
+                                    <session-init/>
+                                    <session-close/>
+                                </log>
+                            </then>
+                        </policy>
+                        {% endfor %}
+                    </policy>
+                    {% endfor %}
+                </policies>
+                <zones>
+                    {% for zone in zones %}
+                    <security-zone>
+                        <name>{{ zone.name }}</name>
+                        <host-inbound-traffic>
+                            <system-services>
+                                <name>ping</name>
+                            </system-services>
+                            <system-services>
+                                <name>traceroute</name>
+                            </system-services>
+                        </host-inbound-traffic>
+                        <interfaces>
+                            <name>{{ zone.interface }}</name>
+                        </interfaces>
+                    </security-zone>
+                    {% endfor %}
+                </zones>
+            </security>
+    </configuration>
