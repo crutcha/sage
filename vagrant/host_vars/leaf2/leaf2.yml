@@ -23,7 +23,7 @@ host:
       family: ethernet-switching
       units:
         - number: 0
-          mode: trunk
+          mode: access
           vlans: 
             - HOST1TEST
   protocols:
