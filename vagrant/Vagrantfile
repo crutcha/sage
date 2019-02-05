@@ -129,6 +129,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # DO NOT REMOVE / NO VMtools installed
         s1.vm.synced_folder ".", "/vagrant", disabled: true
 
+        s1.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5001, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
+
         # Internal em1 port to PFE
         s1.vm.network "private_network",
             auto_config: false,
@@ -158,6 +165,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # DO NOT REMOVE / NO VMtools installed
         s2.vm.synced_folder ".", "/vagrant", disabled: true
 
+        s2.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5002, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
+
         # Internal em1 port to PFE
         s2.vm.network "private_network",
             auto_config: false,
@@ -183,6 +197,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         l1.vm.hostname = "leaf1"
         l1.vm.box = 'juniper/vqfx10k-re'
         l1.vm.boot_timeout = 600
+
+        l1.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5003, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
 
         # DO NOT REMOVE / NO VMtools installed
         l1.vm.synced_folder '.', '/vagrant', disabled: true
@@ -228,6 +249,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # DO NOT REMOVE / NO VMtools installed
         l2.vm.synced_folder '.', '/vagrant', disabled: true
 
+        l2.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5004, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
+
         # Internal em1 port to PFE
         l2.vm.network 'private_network',
             auto_config: false,
@@ -263,6 +291,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # DO NOT REMOVE / NO VMtools installed
         l3.vm.synced_folder '.', '/vagrant', disabled: true
 
+        l3.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5005, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
+
         # Internal em1 port to PFE
         l3.vm.network 'private_network',
             auto_config: false,
@@ -293,6 +328,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "vsrx1" do |vsrx1|
         vsrx1.vm.box = "juniper/ffp-12.1X47-D15.4"
         vsrx1.vm.hostname = "vsrx1"
+        vsrx1.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5009, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
         vsrx1.vm.network "private_network",
             # Apparently IP is required, even though we are going to nuke
             # this with ansible...
@@ -304,6 +345,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "srv1" do |srv1|
         srv1.vm.box = "ubuntu/xenial64"
         srv1.vm.hostname = "srv1"
+        srv1.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5006, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
         srv1.vm.network "private_network",
             ip: "192.168.1.5",
             nic_type: '82545EM',
@@ -314,6 +361,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "srv2" do |srv2|
         srv2.vm.box = "ubuntu/xenial64"
         srv2.vm.hostname = "srv2"
+        srv2.vm.network :forwarded_port, 
+            guest: 22, 
+            host: 5007, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
         srv2.vm.network "private_network",
             ip: "192.168.1.6",
             nic_type: "82545EM",
