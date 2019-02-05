@@ -1,5 +1,8 @@
 # Eidetic
 
+# Lab/Testing
+Vagrant is used to handle dynamic provision/teardown of lab environment used for testing. See [this documentation here](https://github.com/crutcha/eidetic/tree/master/vagrant) to get setup.
+
 # Todo
 
 - [ ] Update README with project info
