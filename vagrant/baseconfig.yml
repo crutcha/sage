@@ -40,3 +40,25 @@
         logfile: "changes.log"
         replace: true
 
+- name: Build Firewall configuration
+  hosts: firewall
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  tasks:
+    - name: Build Firewall Configuration
+      template: src=templates/vsrx.xml dest=/tmp/{{ inventory_hostname  }}.xml
+
+    - name: Install template
+      junos_install_config:
+        host: "{{ ansible_ssh_host  }}"
+        port: "{{ ansible_ssh_port  }}"
+        user: "root"
+        passwd: "Juniper"
+        comment: "configured by ansible"
+        file: "/tmp/{{ inventory_hostname  }}.xml"
+        logfile: "changes.log"
+        replace: true
+
+

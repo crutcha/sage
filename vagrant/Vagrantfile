@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         s1pfe.vm.network "private_network",
             auto_config: false,
-            nic_type: "82540EM",
+            nic_type: "82545EM",
             virtualbox__intnet: "#{UUID}_spine1_internal"
 
         #s1pfe.vm.provider "virtualbox" do |v|
@@ -50,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         s2pfe.vm.network "private_network",
             auto_config: false,
-            nic_type: "82540EM",
+            nic_type: "82545EM",
             virtualbox__intnet: "#{UUID}_spine2_internal"
 
         #s2pfe.vm.provider "virtualbox" do |v|
@@ -70,7 +70,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to RE
         l1pfe.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_leaf1_internal"
 
         # In case you have limited resources, you can limit the CPU used per vqfx-pfe VM, usually 50% is good
@@ -91,7 +91,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to RE
         l2pfe.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_leaf2_internal"
 
         # In case you have limited resources, you can limit the CPU used per vqfx-pfe VM, usually 50% is good
@@ -112,7 +112,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to RE
         l3pfe.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_leaf3_internal"
 
         # In case you have limited resources, you can limit the CPU used per vqfx-pfe VM, usually 50% is good
@@ -132,20 +132,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to PFE
         s1.vm.network "private_network",
             auto_config: false,
-            nic_type: "82540EM",
+            nic_type: "82545EM",
             virtualbox__intnet: "#{UUID}_spine1_internal"
 
         # Unused em2 port
         s1.vm.network "private_network",
             auto_config: false,
-            nic_type: "82540EM",
+            nic_type: "82545EM",
             virtualbox__intnet: "#{UUID}_reserved-bridge"
 
         # em3 - em6 (xe-0/0/0 - xe-0/0/3)
         (0..3).each do |seg_id|
             s1.vm.network "private_network",
                 auto_config: false,
-                nic_type: "82540EM",
+                nic_type: "82545EM",
                 virtualbox__intnet: "#{UUID}_seg#{spine_port_map[1][seg_id]}"
         end
     end
@@ -161,20 +161,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to PFE
         s2.vm.network "private_network",
             auto_config: false,
-            nic_type: "82540EM",
+            nic_type: "82545EM",
             virtualbox__intnet: "#{UUID}_spine2_internal"
 
         # Unused em2 port
         s2.vm.network "private_network",
             auto_config: false,
-            nic_type: "82540EM",
+            nic_type: "82545EM",
             virtualbox__intnet: "#{UUID}_reserved-bridge"
 
         # em3 - em6 (xe-0/0/0 - xe-0/0/3)
         (0..3).each do |seg_id|
             s2.vm.network "private_network",
                 auto_config: false,
-                nic_type: "82540EM",
+                nic_type: "82545EM",
                 virtualbox__intnet: "#{UUID}_seg#{spine_port_map[2][seg_id]}"
         end
     end
@@ -190,27 +190,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to PFE
         l1.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_leaf1_internal"
 
         # Unused em2 port
         l1.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_reserved-bridge"
 
         # em3 - em4 (xe-0/0/0 - xe-0/0/1)
         (0..1).each do |seg_id|
             l1.vm.network 'private_network',
                 auto_config: false,
-                nic_type: '82540EM',
+                nic_type: '82545EM',
                 virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[1][seg_id]}"
         end
 
         # em5 (xe-0/0/2) facing server
         l1.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_server_1"
 
         l1.vm.provider "virtualbox" do |v|
@@ -231,27 +231,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to PFE
         l2.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_leaf2_internal"
 
         # Unused em2 port
         l2.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_reserved-bridge"
 
         # em3 - em4 (xe-0/0/0 - xe-0/0/1)
         (0..1).each do |seg_id|
             l2.vm.network 'private_network',
                 auto_config: false,
-                nic_type: '82540EM',
+                nic_type: '82545EM',
                 virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[2][seg_id]}"
         end
 
         # em5 (xe-0/0/2) facing server
         l2.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_server_2"
     end
 
@@ -266,28 +266,39 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Internal em1 port to PFE
         l3.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_leaf3_internal"
 
         # Unused em2 port
         l3.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_reserved-bridge"
 
         # em3 - em4 (xe-0/0/0 - xe-0/0/1)
         (0..1).each do |seg_id|
             l3.vm.network 'private_network',
                 auto_config: false,
-                nic_type: '82540EM',
+                nic_type: '82545EM',
                 virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[3][seg_id]}"
         end
 
         # em5 (xe-0/0/2) facing server
         l3.vm.network 'private_network',
             auto_config: false,
-            nic_type: '82540EM',
-            virtualbox__intnet: "#{UUID}_server_3"
+            #nic_type: '82545EM',
+            virtualbox__intnet: "#{UUID}_fw_trunk"
+    end
+
+    config.vm.define "vsrx1" do |vsrx1|
+        vsrx1.vm.box = "juniper/ffp-12.1X47-D15.4"
+        vsrx1.vm.hostname = "vsrx1"
+        vsrx1.vm.network "private_network",
+            # Apparently IP is required, even though we are going to nuke
+            # this with ansible...
+            ip: "1.1.1.1",
+            virtualbox__intnet: "#{UUID}_fw_trunk"
+        vsrx1.ssh.insert_key = true
     end
 
     config.vm.define "srv1" do |srv1|
@@ -295,7 +306,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         srv1.vm.hostname = "srv1"
         srv1.vm.network "private_network",
             ip: "192.168.1.5",
-            nic_type: '82540EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_server_1"
         srv1.ssh.insert_key = true
     end
@@ -305,7 +316,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         srv2.vm.hostname = "srv2"
         srv2.vm.network "private_network",
             ip: "192.168.1.6",
-            nic_type: "82540EM",
+            nic_type: "82545EM",
             virtualbox__intnet: "#{UUID}_server_2"
         srv2.ssh.insert_key = true
     end
@@ -316,6 +327,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 "spine"        => ["spine1", "spine2"],
                 "leaf"         => ["leaf1", "leaf2", "leaf3" ],
                 "server"       => ["srv1", "srv2"],
+                "firewall"     => ["vsrx1"],
                 "all:children" => ["spine", "leaf" ]
             }
             ansible.playbook = "baseconfig.yml"

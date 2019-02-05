@@ -13,9 +13,15 @@ wget https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb
 wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox_2016.asc | apt-key add -
 echo "deb http://download.virtualbox.org/virtualbox/debian xenial contrib" >> /etc/apt/sources.list.d/virtualbox.org.list
 apt-get update
-apt install -y gcc linux-headers-4.4.0-134-generic ansible python-pip virtualbox-5.2
+apt install -y gcc linux-headers-4.4.0-134-generic ansible python-pip virtualbox-5.2 vim tmux
 dpkg -i vagrant_2.2.3_x86_64.deb
 
+# dotfile setup stuff
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+git clone https://github.com/crutcha/dotfiles.git
+cp dotfiles/.bashrc ~/
+cp dotfiles/.tmux.conf ~/
+cp dotfiles/.vimrc ~/
 
 # Verify virtualbox setup
 echo "CHECKING VIRTUALBOX INSTALL..."
@@ -36,9 +42,12 @@ ansible-galaxy install Juniper.junos
 
 # Add boxes ahead of time
 echo "INSTALLING VAGRANT BOXES..."
+vagrant plugin install vagrant-host-shell
+vagrant plugin install vagrant-junos
 vagrant box add "juniper/vqfx10k-re"
 vagrant box add "juniper/vqfx10k-pfe"
 vagrant box add "ubuntu/xenial64"
+vagrant box add juniper/ffp-12.1X47-D15.4 --provider virtualbox
 
 # Turn up test environment
 echo "SPINNING UP TEST LAB..."

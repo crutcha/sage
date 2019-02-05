@@ -29,10 +29,6 @@
                     <inet>
                         <address>
                             <name>{{ host.loopback.ip_address }}</name>
-                            <primary/>
-                        </address>
-                        <address>
-                            <name>{{ host.protocols.pim.rp }}</name>
                         </address>
                     </inet>
                 </family>
@@ -86,55 +82,15 @@
         </policy-statement>
     </policy-options>
     <protocols>
-        <bgp>
-            <log-updown />
-            <graceful-restart></graceful-restart>
-            <export>fabric-out</export>
-            {% for g in host.protocols.bgp.groups %}
-            <group>
-                <name>{{ g.name }}</name>
-                <type>{{ g.type }}</type>
-                <mtu-discovery />
-                <multipath>
-                    <multiple-as />
-                </multipath>
-                {% for n in g.neighbors %}
-                <neighbor>
-                    <name>{{ n.name }}</name>
-                    <peer-as>{{ n.peer_as }}</peer-as>
-                </neighbor>
+        <ospf>
+            <area>
+                <name>0.0.0.0</name>
+                {% for intf in host.protocols.ospf.interfaces %}
+                <interface>
+                    <name>{{ intf }}</name>
+                </interface>
                 {% endfor %}
-            </group>
-            {% endfor %}
-        </bgp>
-        <pim>
-            <rp>
-                {% if host.protocols.pim.type == 'local' %}
-                <local>
-                    <family>
-                        <inet>
-                            <address>{{ host.protocols.pim.rp }}</address>
-                        </inet>
-                    </family>
-                </local>
-                {% elif host.protocols.pim.type == 'static' %}
-		<static>
-		    <address>
-			<name>{{ host.protocols.pim.rp }}</name>
-		    </address>
-		</static>
-		{% endif %}
-            </rp>
-            {% for i in host.protocols.pim.interfaces %}
-            <interface>
-                <name>{{ i.name }}</name>
-                <mode>{{ i.mode }}</mode>
-            </interface>
-            {% endfor %}
-	    <interface>
-		<name>lo0.0</name>
-		<mode>sparse</mode>
-            </interface>
-        </pim>
+            </area>
+        </ospf>
     </protocols>
 </configuration>

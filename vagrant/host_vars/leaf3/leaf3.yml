@@ -1,49 +1,52 @@
 host_name: leaf3
 host:
-  local_as: 65005
+  local_as: 65000
   loopback:
     ip_address: 5.5.5.5/32
+  route_distinguisher: "5555:1"
+  vrf_target: "target:65000:5555"
   interfaces:
     - interface: xe-0/0/0
       description: spine1
       family: inet
-      mtu: 9216
       units:
         - number: 0
-          mtu: 9100
           ip_address: 10.10.1.5/31
     - interface: xe-0/0/1
       description: spine2
       family: inet
-      mtu: 9216
       units:
         - number: 0
-          mtu: 9100
           ip_address: 10.10.2.5/31
     - interface: xe-0/0/2
-      description: HOST3
+      description: vSRX
       family: ethernet-switching
-      mtu: 9216
       units:
         - number: 0
           mode: trunk
-          # this is fine for now, but make it an array
-          # later on
-          vlans: HOST3TEST
+          vlans: 
+            - HOST1TEST
+            - HOST2TEST
   protocols:
     bgp:
       groups:
-        - name: fabric
-          type: external
+        - name: overlay
+          type: internal
           neighbors:
-            - name: 10.10.1.4
-              peer_as: 65001
-            - name: 10.10.2.4
-              peer_as: 65002
-    pim:
-      rp_address: 1.1.1.1
+            - name: 3.3.3.3
+              peer_as: 65003
+            - name: 4.4.4.4
+              peer_as: 65004
+    ospf:
+      interfaces:
+        - xe-0/0/0
+        - xe-0/0/1
+        - lo0.0
   vlans:
-    - name: HOST3TEST
-      vlan_id: 300
-      vni: 3000
-      multicast_group: 225.10.10.10
+    - name: HOST1TEST
+      vlan_id: 100
+      vni: 1000
+    - name: HOST2TEST
+      vlan_id: 200
+      vni: 2000
+
