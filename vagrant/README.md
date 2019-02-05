@@ -9,7 +9,7 @@ For testing/labbing purposes, a simple spine/leaf topology with some servers and
 
 ### Topology
 
-![Topology](https://github.com/crutcha/eidetic/tree/master/vagrant/eidetic-lab.png)
+![](https://github.com/crutcha/eidetic/tree/master/vagrant/eidetic-lab.png)
 
 
 These devices were chosen because boxes are freely available for them in Vagrant's box directory. Vagrant is used to provision resources and then Ansible is used to bootstrap the devices with initial configuration. Since the provisioner used is Ansible, this can only be used on Linux or MacOS.
