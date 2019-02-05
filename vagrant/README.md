@@ -16,6 +16,10 @@ These devices were chosen because boxes are freely available for them in Vagrant
 
 The vQFX RE/PFE combo can be resource intensive, and as the testing topology grows, resources will become a concern. Bare metal resources from packet.com can be used which is billed hourly at a very reasonable rate. A bash script(packet.sh) is also provided to setup a bare metal Ubuntu 16.04 from Packet and provision the environment all in one step.
 
+### Caveats
+
+While the vSRX supports using virtio vNIC, the vQFX only support Intel based vNIC drivers which strip 802.1Q tags. All ports connected to vQFX must be access ports, trunking will not work.
+
 ### SSH
 
 Once the topology is spun up, you can access the VMs either via vagrant IE: `vagrant ssh {{box_name}}` or externally via the bare metal servers public IP since port-forwarding is configured. NetConf can also use the same forwarded port.
