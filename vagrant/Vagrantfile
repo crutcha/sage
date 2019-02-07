@@ -321,7 +321,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # em5 (xe-0/0/2) facing server
         l3.vm.network 'private_network',
             auto_config: false,
-            #nic_type: '82545EM',
+            nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_fw_trunk"
     end
 
