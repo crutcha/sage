@@ -19,8 +19,7 @@ CELERY_PASSWORD = os.environ.get("CELERY_PASSWORD")
 
 # Neo4J Setup
 # TODO: this should be moved into views.py with other more specific URI stuff
-# whenever we get to that
-graph = Graph(DATABASE_URL, auth=(DATABASE_USER, DATABASE_PASSWORD))
+graph_db = Graph(DATABASE_URL, auth=(DATABASE_USER, DATABASE_PASSWORD))
 
 def make_celery(app):
     # create context tasks in celery
@@ -46,7 +45,7 @@ celery = make_celery(app)
 
 @app.route("/")
 def device_list():
-    devices = list(graph.nodes.match("Device"))
+    devices = list(graph_db.nodes.match("Device"))
     return render_template("devices.html", devices=devices)
 
 
