@@ -3,7 +3,7 @@ from jnpr.junos import Device
 from celery_app import celery
 from lxml import etree
 from utils import find_and_clean_element
-from py2neo import Node
+from py2neo import Node, Relationship
 
 
 @celery.task(bind=True)
@@ -44,15 +44,24 @@ def gather_l3switch_data(self):
                 speed = find_and_clean_element(intf, "speed")
                 mac_address = find_and_clean_element(intf, "hardware-physical-address")
 
-                phys_intf_def = {
-                    "name": name,
-                    "mtu": mtu,
-                    "speed": speed,
-                    "type": "physical",
-                    "mac": mac_address,
-                }
-                phys_node = Node("Interface", **phys_intf_def)
-                graph_db.create(phys_node)
+                # There's no way for us to do a merge of BOTH the node and relationship at the
+                # same time, it's just how cypher works. 'MERGE interface->belongs_to->device
+                # will not return any matches if the interfaces actually does exist but the
+                # device does not. We can either Check for existance of node and create it only
+                # if it doesn't exist with the relationship we want already, we can keep a
+                # property on the interface that contains the device name even though we'd have
+                # a relationship to it eventually. Keeping the device as a property also means
+                # we have multiple properties being checked to determine uniqueness/if it exists,
+                # which py2neo merge operation can't handle, so we have to do this with raw
+                # cypher call.
+                phys_query = (
+                    f"MATCH (d:Device) WHERE id(d) = {device[0].identity}\n"
+                    f'MERGE (i:Interface {{name: "{name}", device: "{device[0]["name"]}", '
+                    f'mac: "{mac_address}", mtu: "{mtu}", speed: "{speed}", type: '
+                    f'"physical"}})\n'
+                    f"MERGE (i)-[:BELONGS_TO]->(d)"
+                )
+                result = graph_db.run(query)
 
                 logical_interfaces = intf.findall("logical-interface")
                 for logical_intf in logical_interfaces:
@@ -65,8 +74,26 @@ def gather_l3switch_data(self):
                     )
 
                     if addr_family == "inet":
-                        pass
+                        address = find_and_clean_element(
+                            logical_intf, "address-family/interface-address/ifa-local"
+                        )
+                        network = find_and_clean_element(
+                            logical_intf,
+                            "address-family/interface-address/ifa-destination",
+                        )
+
+                        inet_node_def = {
+                            "type": "logical",
+                            "address_family": addr_family,
+                            "name": name,
+                            "mtu": logical_mtu,
+                        }
+                        inet_node = Node("Interface", **inet_node_def)
+                        logical_intf_rel = Relationship.type("SUB_INTERFACE")
+                        graph_db.merge(inet_node, "Interface", "name")
                     elif addr_family == "eth-switch":
+                        pass
+                    elif addr_family == "inet6":
                         pass
 
                 # Need to determine address-family as this will influence what data is sent
