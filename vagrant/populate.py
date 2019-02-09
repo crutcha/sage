@@ -25,7 +25,7 @@ DEVICE_TUPLES = [
 
 public_ip = input("Enter Public IP: ")
 
-base_insert = f'CREATE (cred:Crendtial {username:"{DEVICE_USER}", password:"{DEVICE_PASSWORD}"})\n'
+base_insert = f'CREATE (cred:Crendtial {{username:"{DEVICE_USER}", password:"{DEVICE_PASSWORD}"}})\n'
 for index, value in enumerate(DEVICE_TUPLES):
     base_insert += f'CREATE (d{index}:Device {{name: "{value[0]}", ip: "{public_ip}", port:{value[2]}, type: "{value[1]}"}})\n'
     base_insert += f"CREATE (d{index})-[:USES_CRED]->(cred)\n"

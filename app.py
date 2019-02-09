@@ -23,9 +23,7 @@ graph_db = Graph(DATABASE_URL, auth=(DATABASE_USER, DATABASE_PASSWORD))
 
 def make_celery(app):
     # create context tasks in celery
-    app.config[
-        "CELERY_BROKER_URL"
-    ] = f"amqp://{CELERY_USERNAME}:{CELERY_PASSWORD}@{MQ_HOST}"
+    app.config["CELERY_BROKER_URL"] = f"amqp://{CELERY_USERNAME}:{CELERY_PASSWORD}@{MQ_HOST}"
     celery = Celery(app.import_name, broker=app.config["CELERY_BROKER_URL"])
     celery.conf.update(app.config)
     TaskBase = celery.Task
@@ -56,8 +54,8 @@ def bootstrap_test():
 
 @app.route("/trigger")
 def trigger():
-    result = tasks.celery_test2.delay()
-    return str(result)
+    result = tasks.gather_device_data()
+    return 'worked'
 
 
 if __name__ == "__main__":
