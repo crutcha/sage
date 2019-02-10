@@ -60,41 +60,37 @@ def gather_l3switch_data(self):
                     f'mac: "{mac_address}", mtu: "{mtu}", speed: "{speed}", type: '
                     f'"physical"}})\n'
                     f"MERGE (i)-[:BELONGS_TO]->(d)"
+                    f"return i"
                 )
-                result = graph_db.run(query)
+                result = graph_db.run(phys_query)
+                phys_intf_record = result.evaluate()
 
                 logical_interfaces = intf.findall("logical-interface")
                 for logical_intf in logical_interfaces:
-                    name = find_and_clean_element(logical_intf, "name")
+                    logical_name = find_and_clean_element(logical_intf, "name")
                     addr_family = find_and_clean_element(
                         logical_intf, "address-family/address-family-name"
                     )
                     logical_mtu = find_and_clean_element(
                         logical_intf, "address-family/mtu"
                     )
+                    address = find_and_clean_element(
+                        logical_intf, "address-family/interface-address/ifa-local"
+                    )
+                    network = find_and_clean_element(
+                        logical_intf,
+                        "address-family/interface-address/ifa-destination",
+                    )
 
-                    if addr_family == "inet":
-                        address = find_and_clean_element(
-                            logical_intf, "address-family/interface-address/ifa-local"
-                        )
-                        network = find_and_clean_element(
-                            logical_intf,
-                            "address-family/interface-address/ifa-destination",
-                        )
-
-                        inet_node_def = {
-                            "type": "logical",
-                            "address_family": addr_family,
-                            "name": name,
-                            "mtu": logical_mtu,
-                        }
-                        inet_node = Node("Interface", **inet_node_def)
-                        logical_intf_rel = Relationship.type("SUB_INTERFACE")
-                        graph_db.merge(inet_node, "Interface", "name")
-                    elif addr_family == "eth-switch":
-                        pass
-                    elif addr_family == "inet6":
-                        pass
+                    logical_intf_query = (
+                        f"MATCH (pi:Interface) WHERE id(pi) = {phys_intf_record.identity}\n"
+                        f'MERGE (i:Interface {{name: "{logical_name}", device: "{device[0]["name"]}", '
+                        f'mac: "{mac_address}", mtu: "{logical_mtu}", speed: "{speed}", type: '
+                        f'"logical", addrress_family: "{addr_family}", address: "{address}", '
+                        f'network: "{network}"}})\n'
+                        f"MERGE (i)-[:BELONGS_TO]->(pi)"
+                    )
+                    graph_db.run(logical_intf_query)
 
                 # Need to determine address-family as this will influence what data is sent
                 # into graph DB
