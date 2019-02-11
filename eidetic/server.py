@@ -54,6 +54,10 @@ def trigger():
     result = tasks.gather_l3switch_data()
     return 'worked'
 
+@app.route("/dumpdata")
+def dump_data():
+    result = tasks.dump_data()
+    return 'yep'
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
