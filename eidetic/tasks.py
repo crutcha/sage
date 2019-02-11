@@ -5,7 +5,6 @@ from lxml import etree
 from utils import find_and_clean_element
 from py2neo import Node, Relationship
 
-
 @celery.task(bind=True)
 def celery_test2(self):
     print("YADA YADA YADA")
@@ -88,7 +87,7 @@ def gather_l3switch_data(self):
                         f'mac: "{mac_address}", mtu: "{logical_mtu}", speed: "{speed}", type: '
                         f'"logical", addrress_family: "{addr_family}", address: "{address}", '
                         f'network: "{network}"}})\n'
-                        f"MERGE (i)-[:BELONGS_TO]->(pi)"
+                        f"MERGE (i)-[:SUB_INTERFACE]->(pi)"
                     )
                     graph_db.run(logical_intf_query)
 
@@ -100,3 +99,13 @@ def gather_l3switch_data(self):
 
         except Exception as exc:
             app.logger.warning(exc)
+
+
+@celery.task(bind=True)
+def dump_data(self):
+
+    # Determine what providers are available to us at runtime, gives a bit more
+    # flexibility. At least for now. Allows for addition of providers without 
+    # restarting of app, but also means we lose ability to create relationship
+    # of provider to device and instead rely on a string property on the 
+    # device node.
