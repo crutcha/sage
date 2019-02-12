@@ -13,8 +13,6 @@ from dataclasses import dataclass
 
 @dataclass
 class Device:
-    __slots__ = ["name", "ip", "port", "device_type"]
-
     name: str
     ip: str
     port: int
@@ -23,24 +21,12 @@ class Device:
 
 @dataclass
 class Credential:
-    __slots__ = ["username", "password"]
-
     username: str
     password: str
 
 
 @dataclass
 class Interface:
-    __slots__ = [
-        "name",
-        "mtu",
-        "speed",
-        "mac",
-        "device",
-        "address_family",
-        "intf_type",
-        "network",
-    ]
     name: str
     mtu: int
     speed: str
@@ -48,4 +34,5 @@ class Interface:
     device: str
     address_family: str
     intf_type: str
-    network: str
+    address: str = ""
+    network: str = ""
