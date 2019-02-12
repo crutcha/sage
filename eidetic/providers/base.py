@@ -3,9 +3,17 @@ sys.path.append('..')
 
 from abc import ABC, ABCMeta, abstractmethod
 from typing import List
-from .models import Interface
+from .models import Interface, Device, Credential
 
 class L3Switch(metaclass=ABCMeta):
+
+    @abstractmethod
+    def __init__(self, device: Device, cred: Credential):
+        """
+        Device and Credential type will be provided for creating
+        a connection handler.
+        """
+        pass
 
     @abstractmethod
     def gather_interfaces(self) -> List[Interface]:
@@ -19,5 +27,4 @@ class L3Switch(metaclass=ABCMeta):
         Neo4j.
         """
 
-        import pdb; pdb.set_trace()
         intf_objects = self.gather_interfaces()

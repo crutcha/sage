@@ -13,7 +13,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Device:
-    __slots__ = ["name", "ip", "port", "type"]
+    __slots__ = ["name", "ip", "port", "device_type"]
 
     name: str
     ip: str

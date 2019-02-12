@@ -15,11 +15,11 @@ DEVICE_PASSWORD = os.environ.get("DEVICE_PASSWORD")
 
 # Could probably just do this from vagrantfile but whatever...
 DEVICE_TUPLES = [
-    ("spine1", "L3Switch", 5001),
-    ("spine2", "L3Switch", 5002),
-    ("leaf1", "L3Switch", 5003),
-    ("leaf2", "L3Switch", 5004),
-    ("leaf3", "L3Switch", 5005),
+    ("spine1", "QFX", 5001),
+    ("spine2", "QFX", 5002),
+    ("leaf1", "QFX", 5003),
+    ("leaf2", "QFX", 5004),
+    ("leaf3", "QFX", 5005),
     ("vsrx1", "Firewall", 5009),
 ]
 
