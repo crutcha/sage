@@ -1,5 +1,5 @@
 from .base import L3Switch
-from .models import Interface, Device, Credential
+from .models import Interface, Device, Credential, L2ForwardingEntry
 from typing import List
 from jnpr.junos import Device as JunosDevice
 from lxml import etree
@@ -15,8 +15,21 @@ class QFX(L3Switch):
             user=cred.username,
             password=cred.password
         )
+        # Also stupid
+        self.device = device
         self.connection.open()
         logging.debug(f"Connection opened: {device.name}")
+
+    def gather_l2_forwarding_table(self) -> List[L2ForwardingEntry]:
+        forwarding_table = self.connection.rpc.get_ethernet_switching_table_information()
+        logging.debug(etree.tostring(forwarding_table).decode())
+
+        if self.device.name == "leaf1":
+            print('here')
+            # TODO: do we need to grab VLANs first so we can match on them?
+            # Probably.
+
+        vlan_db = forwarding_table.findall("l2ng-l2ald-mac-entry-vlan")
 
     def gather_interfaces(self) -> List[Interface]:
         phys_interfaces = []
@@ -37,7 +50,9 @@ class QFX(L3Switch):
                 mtu = mtu,
                 speed = speed,
                 mac = mac_address,
-                device = device.name,
+                # TODO: needing to access self here seems dumb. Maybe we should
+                # have gather interfaces abstract take device name as argument?
+                device = self.device.name,
                 address_family = "",
                 intf_type = "physical",
                 address = "",
@@ -66,7 +81,8 @@ class QFX(L3Switch):
                     mtu = logical_mtu,
                     speed = speed,
                     mac = mac_address,
-                    device = device.name,
+                    # See above TODO
+                    device = self.device.name,
                     address_family = addr_family,
                     intf_type = "logical",
                     address = address,
@@ -74,4 +90,4 @@ class QFX(L3Switch):
                 )
                 logical_interfaces.append(logical_intf_obj)
     
-        return physical_interfaces + logical_interfaces
+        return phys_interfaces + logical_interfaces

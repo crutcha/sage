@@ -24,7 +24,6 @@ class Credential:
     username: str
     password: str
 
-
 @dataclass
 class Interface:
     name: str
@@ -36,3 +35,7 @@ class Interface:
     intf_type: str
     address: str = ""
     network: str = ""
+
+@dataclass
+class L2ForwardingEntry:
+    vlan: int
