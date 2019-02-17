@@ -51,11 +51,13 @@ def bootstrap_test():
 
 @app.route("/trigger")
 def trigger():
+    # Synchronous for debugging
     result = tasks.gather_l3switch_data()
     return 'worked'
 
 @app.route("/dumpdata")
 def dump_data():
+    # Synchronous for debugging
     result = tasks.dump_data()
     return 'yep'
 

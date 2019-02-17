@@ -25,6 +25,9 @@ DEVICE_TUPLES = [
 
 public_ip = input("Enter Public IP: ")
 
+flush_db = 'MATCH (n) DETACH DELETE n'
+graph_db.run(flush_db)
+
 base_insert = f'CREATE (cred:Credential {{username:"{DEVICE_USER}", password:"{DEVICE_PASSWORD}"}})\n'
 for index, value in enumerate(DEVICE_TUPLES):
     base_insert += f'CREATE (d{index}:Device {{name: "{value[0]}", ip: "{public_ip}", port:{value[2]}, type: "{value[1]}"}})\n'
