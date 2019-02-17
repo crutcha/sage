@@ -36,12 +36,17 @@ class L3Switch(metaclass=ABCMeta):
 
         intf_objects = self.gather_interfaces()
 
+        #TODO: should we use label vs property for interfaces for faster query?
+        # or would indexing suffice?
         for intf in intf_objects:
+            # Merge only on interface and device, the rest of the properties
+            # will be updated on every ETL run
             intf_query = (
                 f'MATCH (d:Device) WHERE d.name = "{self.device.name}"\n'
-                f'MERGE (i:Interface {{name: "{intf.name}", device: "{self.device.name}", '
-                f'mac: "{intf.mac}", mtu: "{intf.mtu}", speed: "{intf.speed}", type: '
-                f'"{intf.intf_type}"}})\n'
+                f'MERGE (i:Interface {{name: "{intf.name}", device: "{self.device.name}"}}) '
+                f'SET i.mac = "{intf.mac}", i.mtu = "{intf.mtu}", i.speed = "{intf.speed}", '
+                f' i.type = "{intf.intf_type}" , i.encapsulation = "{intf.encapsulation}", '
+                f'i.ifindex = {intf.ifindex}, i.updated_at = timestamp()\n'
                 f'MERGE (i)-[:COMPONENT_OF]->(d)'
             )
             print(intf_query)

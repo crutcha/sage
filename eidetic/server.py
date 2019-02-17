@@ -9,6 +9,7 @@ import sys
 # Hacky, only way to make VS Code debugger work
 sys.path.append('/home/drew/Documents/eidetic/')
 import tasks
+import time
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -60,6 +61,19 @@ def dump_data():
     # Synchronous for debugging
     result = tasks.dump_data()
     return 'yep'
+
+@app.route("/clearstale")
+def clear_stale():
+    current_milli_time = int(round(time.time() * 1000))
+    #stale_epoch = current_milli_time - 1800000
+    stale_epoch = current_milli_time
+    # DEBUG, let's do 1 hour?
+    stale_query = (
+        f"MATCH (i:Interface) WHERE i.updated_at < {stale_epoch}\n "
+        f"DETACH DELETE i RETURN i"
+    )
+    result = list(graph_db.run(stale_query))
+    return f"{len(result)} interfaces deleted"
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

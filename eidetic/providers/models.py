@@ -29,6 +29,8 @@ class Interface:
     name: str
     mtu: int
     speed: str
+    encapsulation: str
+    ifindex: int
     mac: str
     device: str
     address_family: str

@@ -44,12 +44,16 @@ class QFX(L3Switch):
             mtu = find_and_clean_element(intf, "mtu")
             speed = find_and_clean_element(intf, "speed")
             mac_address = find_and_clean_element(intf, "hardware-physical-address")
+            encapsulation = find_and_clean_element(intf, "encapsulation")
+            if_index = find_and_clean_element(intf, "local-index")
 
             phys_intf = Interface(
                 name = name,
                 mtu = mtu,
                 speed = speed,
+                encapsulation = encapsulation,
                 mac = mac_address,
+                ifindex = int(if_index) if if_index else 0,
                 # TODO: needing to access self here seems dumb. Maybe we should
                 # have gather interfaces abstract take device name as argument?
                 device = self.device.name,
@@ -60,9 +64,13 @@ class QFX(L3Switch):
             )
             phys_interfaces.append(phys_intf)
 
+            if 'vtep' in name:
+                print('here')
+
             logical_intfs = intf.findall("logical-interface")
             for logical_intf in logical_intfs:
                 logical_name = find_and_clean_element(logical_intf, "name")
+                logical_encap = find_and_clean_element(logical_intf, "encapsulation")
                 addr_family = find_and_clean_element(
                     logical_intf, "address-family/address-family-name"
                 )
@@ -75,12 +83,15 @@ class QFX(L3Switch):
                 network = find_and_clean_element(
                     logical_intf, "address-family/interface-address/ifa-destination"
                 )
+                if_index = find_and_clean_element(logical_intf, "local-index")
 
                 logical_intf_obj = Interface(
                     name = logical_name,
                     mtu = logical_mtu,
+                    encapsulation = logical_encap,
                     speed = speed,
                     mac = mac_address,
+                    ifindex = int(if_index) if if_index else 0,
                     # See above TODO
                     device = self.device.name,
                     address_family = addr_family,
