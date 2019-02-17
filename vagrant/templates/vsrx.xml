@@ -6,11 +6,9 @@
                 {% for intf in interfaces %}
                 <interface replace="replace">
                     <name>{{ intf.interface }}</name>
-                    <vlan-tagging/>
                     {% for u in intf.units %}
                     <unit>
                         <name>{{ u.number }}</name>
-                        <vlan-id>{{ u.vlan_id }}</vlan-id>
                         <family>
                             <inet>
                                 <address>

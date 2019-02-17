@@ -322,7 +322,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         l3.vm.network 'private_network',
             auto_config: false,
             nic_type: '82545EM',
-            virtualbox__intnet: "#{UUID}_fw_trunk"
+            virtualbox__intnet: "#{UUID}_server_1"
+
+        # em6 (xe-0/0/3) facing server
+        l3.vm.network 'private_network',
+            auto_config: false,
+            nic_type: '82545EM',
+            virtualbox__intnet: "#{UUID}_server_2"
     end
 
     config.vm.define "vsrx1" do |vsrx1|
@@ -338,7 +344,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             # Apparently IP is required, even though we are going to nuke
             # this with ansible...
             ip: "1.1.1.1",
-            virtualbox__intnet: "#{UUID}_fw_trunk"
+            virtualbox__intnet: "#{UUID}_server_1"
+        vsrx1.vm.network "private_network",
+            # Apparently IP is required, even though we are going to nuke
+            # this with ansible...
+            ip: "2.2.2.2",
+            virtualbox__intnet: "#{UUID}_server_2"
         vsrx1.ssh.insert_key = true
     end
 

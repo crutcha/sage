@@ -19,13 +19,20 @@ host:
         - number: 0
           ip_address: 10.10.2.5/31
     - interface: xe-0/0/2
-      description: vSRX
+      description: vSRX HOST1
       family: ethernet-switching
       units:
         - number: 0
-          mode: trunk
+          mode: access
           vlans: 
             - HOST1TEST
+    - interface: xe-0/0/3
+      description: vSRX HOST2
+      family: ethernet-switching
+      units:
+        - number: 0
+          mode: access
+          vlans:
             - HOST2TEST
   protocols:
     bgp:
