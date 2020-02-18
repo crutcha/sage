@@ -37,7 +37,7 @@ echo "SETTING UP ANSIBLE..."
 cd ~/eidetic
 pip install ansible==2.7.15
 pip install junos-eznc jxmlease
-ansible-galaxy install Juniper.junos,v2.1.0
+ansible-galaxy install Juniper.junos,2.1.0
 
 
 # Add boxes ahead of time
