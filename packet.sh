@@ -8,7 +8,6 @@ set -e
 
 # Grab and install everything we need
 cd /tmp
-apt-add-repository ppa:ansible/ansible -y
 wget https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb
 wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox_2016.asc | apt-key add -
 echo "deb http://download.virtualbox.org/virtualbox/debian xenial contrib" >> /etc/apt/sources.list.d/virtualbox.org.list
@@ -38,7 +37,7 @@ echo "SETTING UP ANSIBLE..."
 cd ~/eidetic
 pip install ansible==2.7.15
 pip install junos-eznc jxmlease
-ansible-galaxy install Juniper.junos
+ansible-galaxy install Juniper.junos,v2.1.0
 
 
 # Add boxes ahead of time
