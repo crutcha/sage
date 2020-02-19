@@ -92,13 +92,11 @@
         </policy-statement>
     </policy-options>
     <protocols>
-        <protocols>
-            <lldp>
-                <interface>
-                    <name>all</name>
-                </interface>
-            </lldp>
-        </protocols>
+        <lldp>
+            <interface>
+                <name>all</name>
+            </interface>
+        </lldp>
         <ospf>
             <area>
                 <name>0.0.0.0</name>
