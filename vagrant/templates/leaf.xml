@@ -109,6 +109,13 @@
         </policy-statement>
     </policy-options>
     <protocols>
+        <protocols>
+            <lldp>
+                <interface>
+                    <name>all</name>
+                </interface>
+            </lldp>
+        </protocols>
         <bgp>
             {% for g in host.protocols.bgp.groups %}
             <group>
