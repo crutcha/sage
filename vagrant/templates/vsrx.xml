@@ -1,6 +1,16 @@
     <configuration>
             <system>
                 <host-name>{{ host_name }}</host-name>
+                <login>
+                    <user>
+                        <name>atlas</name>
+                        <uid>2001</uid>
+                        <class>super-user</class>
+                        <authentication>
+                            <encrypted-password>$6$5EWViI6d$SNimPEH8LeNTG4oueFFPl/BxpNx4xIfCAiq.YJrIMp9fFPYi8vxrTpvBzSzSTX8F0bMp68L9wp/Typ0MGTcfS/</encrypted-password>
+                        </authentication>
+                    </user>
+                </login>
             </system>    
         <interfaces>
                 {% for intf in interfaces %}
