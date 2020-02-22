@@ -43,7 +43,8 @@ cd ~/eidetic
 pip3 install ansible==2.7.15
 pip3 install junos-eznc jxmlease
 ansible-galaxy install Juniper.junos,2.1.0
-
+rm /usr/bin/python
+ln -s /usr/bin/python3 /usr/bin/python
 
 # Add boxes ahead of time
 echo "INSTALLING VAGRANT BOXES..."
