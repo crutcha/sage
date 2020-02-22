@@ -16,7 +16,7 @@ wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox_2016.a
 wget https://download.virtualbox.org/virtualbox/5.2.36/virtualbox-5.2_5.2.36-135684~Ubuntu~xenial_amd64.deb
 echo "deb http://download.virtualbox.org/virtualbox/debian xenial contrib" >> /etc/apt/sources.list.d/virtualbox.org.list
 apt-get update
-apt install -y gcc linux-headers-4.4.0-134-generic python-pip vim tmux gdebi
+apt install -y gcc linux-headers-4.4.0-134-generic python3 python3-dev python3-pip vim tmux gdebi
 dpkg -i vagrant_2.2.3_x86_64.deb
 gdebi --non-interactive virtualbox-5.2_5.2.36-135684~Ubuntu~xenial_amd64.deb
 
@@ -40,8 +40,8 @@ fi
 # Install all the ansible things
 echo "SETTING UP ANSIBLE..."
 cd ~/eidetic
-pip install ansible==2.7.15
-pip install junos-eznc jxmlease
+pip3 install ansible==2.7.15
+pip3 install junos-eznc jxmlease
 ansible-galaxy install Juniper.junos,2.1.0
 
 
