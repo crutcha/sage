@@ -14,8 +14,9 @@ wget https://download.virtualbox.org/virtualbox/5.2.36/virtualbox-5.2_5.2.36-135
 echo "deb http://download.virtualbox.org/virtualbox/debian xenial contrib" >> /etc/apt/sources.list.d/virtualbox.org.list
 apt-get update
 apt install -y gcc linux-headers-4.4.0-134-generic python-pip vim tmux
+apt install -y virtualbox-5.2
 dpkg -i vagrant_2.2.3_x86_64.deb
-apt install ./virtualbox-5.2_5.2.36-135684~Ubuntu~xenial_amd64.deb
+#apt install ./virtualbox-5.2_5.2.36-135684~Ubuntu~xenial_amd64.deb
 
 # dotfile setup stuff
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
