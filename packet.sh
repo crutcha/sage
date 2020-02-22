@@ -6,6 +6,9 @@
 # Fail fast
 set -e
 
+# Verbose
+set -x
+
 # Grab and install everything we need
 cd /tmp
 wget https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb
