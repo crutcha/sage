@@ -12,7 +12,7 @@ wget https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb
 wget -q -O - http://download.virtualbox.org/virtualbox/debian/oracle_vbox_2016.asc | apt-key add -
 echo "deb http://download.virtualbox.org/virtualbox/debian xenial contrib" >> /etc/apt/sources.list.d/virtualbox.org.list
 apt-get update
-apt install -y gcc linux-headers-4.4.0-134-generic python-pip virtualbox-5.2 vim tmux
+apt install -y gcc linux-headers-4.4.0-134-generic python-pip virtualbox-6.1 vim tmux
 dpkg -i vagrant_2.2.3_x86_64.deb
 
 # dotfile setup stuff
