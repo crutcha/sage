@@ -334,7 +334,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         veos.vm.box = "keepworld/veos-lab-4.19"
         veos.ssh.insert_key = false
 
-        l3.vm.network :forwarded_port, guest: 22, 
+        veos.vm.network :forwarded_port, guest: 22, 
             host: 5010, 
             host_ip: "0.0.0.0", 
             id: "ssh", 
@@ -342,7 +342,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # em3 - em4 (xe-0/0/0 - xe-0/0/1)
         (0..1).each do |seg_id|
-            l3.vm.network 'private_network',
+            veos.vm.network 'private_network',
                 auto_config: false,
                 nic_type: '82545EM',
                 virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[4][seg_id]}"
