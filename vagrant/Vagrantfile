@@ -291,8 +291,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # DO NOT REMOVE / NO VMtools installed
         l3.vm.synced_folder '.', '/vagrant', disabled: true
 
-        l3.vm.network :forwarded_port, 
-            guest: 22, 
+        l3.vm.network :forwarded_port, guest: 22, 
             host: 5005, 
             host_ip: "0.0.0.0", 
             id: "ssh", 
@@ -329,6 +328,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             auto_config: false,
             nic_type: '82545EM',
             virtualbox__intnet: "#{UUID}_server_2"
+    end
+
+    config.vm.define "veos" do |veos|
+        veos.vm.box = "keepworld/veos-lab-4.19"
+        veos.ssh.insert_key = false
+
+        l3.vm.network :forwarded_port, guest: 22, 
+            host: 5010, 
+            host_ip: "0.0.0.0", 
+            id: "ssh", 
+            auto_correct: true
+
+        # em3 - em4 (xe-0/0/0 - xe-0/0/1)
+        (0..1).each do |seg_id|
+            l3.vm.network 'private_network',
+                auto_config: false,
+                nic_type: '82545EM',
+                virtualbox__intnet: "#{UUID}_seg#{leaf_port_map[4][seg_id]}"
+        end
+
     end
 
     config.vm.define "vsrx1" do |vsrx1|
