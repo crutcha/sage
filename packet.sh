@@ -53,6 +53,7 @@ vagrant plugin install vagrant-junos
 vagrant box add "juniper/vqfx10k-re"
 vagrant box add "juniper/vqfx10k-pfe"
 vagrant box add "ubuntu/xenial64"
+vagrant bo add "keepworld/veos-lab-4.19"
 vagrant box add juniper/ffp-12.1X47-D15.4 --provider virtualbox
 
 # Turn up test environment
