@@ -25,6 +25,13 @@ host:
         - number: 0
           mtu: 9100
           ip_address: 10.10.1.4/31
+    - interface: xe-0/0/3
+      description: veos
+      mtu: 9216
+      units:
+        - number: 0
+          mtu: 9100
+          ip_address: 10.10.1.6/31
   protocols:
     bgp:
       groups:
