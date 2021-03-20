@@ -15,7 +15,7 @@ dominate==2.3.5
 Flask==1.0.2
 Flask-Bootstrap==3.3.7.1
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 junos-eznc==2.2.0
 kombu==4.2.2.post1
 lxml==4.3.1
