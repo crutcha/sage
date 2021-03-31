@@ -18,7 +18,7 @@ itsdangerous==1.1.0
 Jinja2==2.10
 junos-eznc==2.2.0
 kombu==4.2.2.post1
-lxml==4.3.1
+lxml==4.6.3
 MarkupSafe==1.1.0
 more-itertools==5.0.0
 ncclient==0.6.3
